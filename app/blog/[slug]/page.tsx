@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import axios from "axios";
-import Comments from "../../components/disqus/Comments"; // Fixed import path
+import Comments from "../../../components/disqus/Comments"; // Fixed import path
 
 export default async function Post({ params }: { params: { slug: string } }) {
   const { data: posts } = await axios.get(

@@ -1,131 +1,116 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Newsletter from "@/components/Newsletter";
+import { getFeaturedPosts } from "@/lib/wordpress";
 
-// Mock data (replace with real API calls)
-const featuredProjects = [
-  {
-    title: "Jagadamba Holidays",
-    description: "Laravel + Next.js travel site with 20% SEO boost.",
-    url: "/projects",
-    tech: ["Laravel", "Next.js"],
-  },
-];
+export default async function Home() {
+  const featuredPosts = await getFeaturedPosts();
 
-const featuredPosts = [
-  {
-    title: "Why I Switched to Next.js",
-    excerpt: "My journey from WordPress to modern web development",
-    slug: "why-nextjs",
-  },
-];
+  const projects = [
+    {
+      title: "Jagadamba Holidays",
+      description: "Laravel + Next.js travel site",
+      url: "https://jagadambaholidays.com",
+      tech: ["Laravel", "Next.js"],
+    },
+    // Add 4 more projects...
+  ];
 
-export default function Home() {
   return (
-    <div className="min-h-screen">
+    <>
       {/* Hero Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-blue-50 to-indigo-50">
-        <div className="container mx-auto flex flex-col md:flex-row items-center gap-8">
-          <div className="md:w-1/2">
+      <section className="container py-24 lg:py-32">
+        <div className="grid items-center gap-6 lg:grid-cols-2">
+          <div>
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+              Hi, I'm Kamal Khanal
+            </h1>
+            <p className="mt-6 text-xl text-muted-foreground">
+              Senior Full-Stack Developer specializing in modern web
+              technologies.
+            </p>
+            <div className="mt-10 flex gap-4">
+              <Button asChild>
+                <Link href="/projects">View Projects</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/contact">Contact Me</Link>
+              </Button>
+            </div>
+          </div>
+          <div className="flex justify-center">
             <Image
-              src="/profile.jpg" // Replace with your image
+              src="/profile.jpg"
               alt="Kamal Khanal"
-              width={300}
-              height={300}
-              className="rounded-full border-4 border-white shadow-lg mx-auto md:mx-0"
+              width={400}
+              height={400}
+              className="rounded-full border-8 border-primary/10 shadow-2xl"
               priority
             />
-          </div>
-          <div className="md:w-1/2 text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Hi, I'm <span className="text-blue-600">Kamal Khanal</span>
-            </h1>
-            <p className="text-xl text-gray-600 mb-6">
-              Senior Full-Stack Developer specializing in Laravel & Next.js
-            </p>
-            <div className="flex gap-4 justify-center md:justify-start">
-              <Link
-                href="/projects"
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-              >
-                View My Work
-              </Link>
-              <Link
-                href="/blog"
-                className="px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition"
-              >
-                Read My Blog
-              </Link>
-            </div>
           </div>
         </div>
       </section>
 
       {/* Featured Projects */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Featured Projects
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProjects.map((project) => (
-              <div
-                key={project.title}
-                className="border rounded-xl overflow-hidden hover:shadow-lg transition"
-              >
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <Link
-                    href={project.url}
-                    className="text-blue-600 hover:underline inline-flex items-center"
-                  >
-                    View Project →
-                  </Link>
-                </div>
-              </div>
+      <section className="container py-12">
+        <h2 className="text-3xl font-bold mb-8">Featured Projects</h2>
+        <div className="relative">
+          <div className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide">
+            {projects.map((project) => (
+              <Card key={project.title} className="min-w-[300px]">
+                <CardHeader>
+                  <CardTitle>{project.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    {project.description}
+                  </p>
+                  <Button asChild variant="link" className="p-0">
+                    <Link href={project.url}>View Project →</Link>
+                  </Button>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
       {/* Featured Blog Posts */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Latest Articles
-          </h2>
-          <div className="max-w-3xl mx-auto space-y-8">
-            {featuredPosts.map((post) => (
-              <article key={post.slug} className="border-b pb-8">
-                <Link href={`/blog/${post.slug}`}>
-                  <h3 className="text-2xl font-semibold hover:text-blue-600 transition">
-                    {post.title}
+      <section className="container py-12">
+        <h2 className="text-3xl font-bold mb-8">Latest Articles</h2>
+        <div className="grid gap-8">
+          {featuredPosts.map((post) => (
+            <Card key={post.id} className="hover:shadow-md transition-shadow">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="md:col-span-1">
+                  <Image
+                    src={post.featured_image || "/placeholder.jpg"}
+                    alt={post.title.rendered}
+                    width={400}
+                    height={225}
+                    className="w-full h-full object-cover rounded-l-lg"
+                  />
+                </div>
+                <div className="md:col-span-2 p-6">
+                  <h3 className="text-xl font-semibold mb-2">
+                    <Link href={`/blog/${post.slug}`}>
+                      {post.title.rendered}
+                    </Link>
                   </h3>
-                </Link>
-                <p className="text-gray-600 mt-2">{post.excerpt}</p>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="text-blue-600 hover:underline inline-block mt-4"
-                >
-                  Read more
-                </Link>
-              </article>
-            ))}
-          </div>
+                  <div
+                    className="prose text-muted-foreground"
+                    dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+                  />
+                </div>
+              </div>
+            </Card>
+          ))}
         </div>
       </section>
-    </div>
+
+      <Newsletter />
+    </>
   );
 }
